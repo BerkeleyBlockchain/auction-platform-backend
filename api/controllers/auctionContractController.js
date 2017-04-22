@@ -15,7 +15,6 @@ var db = app.database();
 
 exports.getContracts = function(req, res) {
   db.ref('contracts/').orderByChild('cId').once('value').then(function(snapshot){
-    res.header('Access-Control-Allow-Origin', "*");
     res.json(snapshot.val());
   });
 };
@@ -35,7 +34,6 @@ exports.addContract = function(req, res) {
     updates[postKey] = data;
     db.ref('contracts/').update(updates);
     db.ref().update({"count" : count.val()+1});
-    res.header('Access-Control-Allow-Origin', "*");
     res.json({"uploaded data" : updates});
   });
 };
