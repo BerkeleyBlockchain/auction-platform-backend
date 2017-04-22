@@ -14,27 +14,32 @@ var app = firebase.initializeApp(config, "other");
 var db = app.database();
 
 exports.getContracts = function(req, res) {
-  db.ref('contracts/').once('value').then(function(snapshot){
+  db.ref('contracts/').orderByChild('cId').once('value').then(function(snapshot){
     res.json(snapshot.val());
   });
 };
 
 exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
-    db.ref('contracts/' + count.val()).set({
-      asset : req.param('asset'),
-      price : req.param('price'),
-      time : req.param('time'),
+    var postKey = db.ref('contracts/').push().key;
+    var data = {
+      asset : req.body.asset,
+      price : req.body.price,
+      time : req.body.time,
       date : Date.now(),
-      qty : req.param('qty'),
+      qty : req.body.qty,
       cId : count.val()
-    });
+    };
+    var updates = {};
+    updates[postKey] = data;
+    db.ref('contracts/').update(updates);
+    db.ref().update({"count" : count.val()+1});
+    res.json({"uploaded data" : updates});
   });
-
 };
 
 exports.getContract = function(req, res) {
-  db.ref('contracts/' + req.contractId).once('value').then(function(snapshot){
+  db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
     res.json(snapshot.val());
   });
 };
@@ -44,6 +49,27 @@ exports.bids = function(req, res) {
     res.json(snapshot.val());
   });
 };
+
+exports.bidById = function(req, res) {
+  db.ref('bids/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
+    res.json(snapshot.val());
+  });
+};
+
+exports.addBid = function(req, res) {
+  var postKey = db.ref('bids/').push().key;
+  var data = {
+    supplier : req.query.supplier,
+    price : req.query.price,
+    date : Date.now(),
+    time : req.query.time,
+    cId : Number.parseInt(req.query.cId)
+  };
+  var updates = {};
+  updates[postKey] = data;
+  db.ref('bids/').update(updates);
+  res.json({"uploaded data" : updates});
+}
 
 exports.count = function(req, res) {
   db.ref('count/').once('value').then(function(snapshot){

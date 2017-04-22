@@ -6,11 +6,15 @@ module.exports = function(app) {
   // todoList Routes
   app.route('/contracts')
     .get(auctionController.getContracts);
-  app.route('/contracts/addContract').post(auctionController.addContract);
-  app.route('/contracts/:contractId')
+  app.route('/contracts/addContract')
+    .post(auctionController.addContract);
+  app.route('/contractById/')
     .get(auctionController.getContract);
   app.route('/count')
     .get(auctionController.count);
   app.route('/bids')
-    .get(auctionController.bids);
+    .get(auctionController.bids)
+    .post(auctionController.addBid);
+  app.route('/bidById')
+    .get(auctionController.bidById);
 };
