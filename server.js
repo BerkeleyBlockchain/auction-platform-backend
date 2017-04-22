@@ -3,7 +3,7 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000,
   bodyParser = require('body-parser');
-
+var cors = require('cors');
 var config = {
     apiKey: "AIzaSyAq9bvmBhMUORLv4Uiu4YaTmSPDdT_ifFw",
     authDomain: "auctionplatform-c8e90.firebaseapp.com",
@@ -12,6 +12,14 @@ var config = {
     storageBucket: "auctionplatform-c8e90.appspot.com",
     messagingSenderId: "693452962808"
     };
+
+var corsOptions = {
+  origin: true
+ };
+
+app.use(cors(corsOptions));
+
+
 
 // Initialize the default app
 var defaultApp = firebase.initializeApp(config);

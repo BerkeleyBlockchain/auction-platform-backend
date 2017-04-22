@@ -34,6 +34,7 @@ exports.addContract = function(req, res) {
     updates[postKey] = data;
     db.ref('contracts/').update(updates);
     db.ref().update({"count" : count.val()+1});
+    res.header('Access-Control-Allow-Origin', *);
     res.json({"uploaded data" : updates});
   });
 };
