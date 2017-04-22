@@ -4,7 +4,7 @@
   "description": "RESTful Blockchain API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
