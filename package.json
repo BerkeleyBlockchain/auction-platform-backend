@@ -4,7 +4,7 @@
   "description": "RESTful Blockchain API",
   "main": "index.js",
   "scripts": {
-    "start": "npm run start",
+    "start": "yarn run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
