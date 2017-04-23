@@ -59,11 +59,11 @@ exports.bidById = function(req, res) {
 exports.addBid = function(req, res) {
   var postKey = db.ref('bids/').push().key;
   var data = {
-    supplier : req.query.supplier,
-    price : req.query.price,
+    supplier : req.body.supplier,
+    price : req.body.price,
     date : Date.now(),
-    time : req.query.time,
-    cId : Number.parseInt(req.query.cId)
+    time : req.body.time,
+    cId : Number.parseInt(req.body.cId)
   };
   var updates = {};
   updates[postKey] = data;
