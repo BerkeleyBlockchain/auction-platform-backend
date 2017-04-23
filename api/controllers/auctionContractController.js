@@ -23,11 +23,11 @@ exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
     var postKey = db.ref('contracts/').push().key;
     var data = {
-      asset : req.query.asset,
-      price : req.query.price,
-      time : req.query.time,
+      asset : req.body.asset,
+      price : req.body.price,
+      time : req.body.time,
       date : Date.now(),
-      qty : req.query.qty,
+      qty : req.body.qty,
       cId : count.val()
     };
     var updates = {};
