@@ -19,6 +19,20 @@ exports.getContracts = function(req, res) {
   });
 };
 
+exports.closeContract = function(req, res) {
+  db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
+    var data = snapshot.val();
+    var key = 0;
+    for (const k in data){
+      if (data[k]['cId'] == req.header('cId')){
+        key = k;
+      }
+    }
+    snapshot.ref.child(key).remove();
+    res.json({you: "killin it"});
+  });
+};
+
 exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
     var postKey = db.ref('contracts/').push().key;
@@ -40,7 +54,9 @@ exports.addContract = function(req, res) {
 
 exports.getContract = function(req, res) {
   db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
-    res.json(snapshot.val());
+    for (const key in snapshot.val()){
+      res.json(snapshot.val()[key]);
+    }
   });
 };
 
