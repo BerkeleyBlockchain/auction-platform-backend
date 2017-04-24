@@ -55,12 +55,12 @@ exports.addContract = function(req, res) {
 exports.editContract = function(req, res) {
     var postKey = db.ref('contracts/').push().key;
     var data = {
-      asset : req.query.asset,
-      price : req.query.price,
-      time : req.query.time,
+      asset : req.body.asset,
+      price : req.body.price,
+      time : req.body.time,
       date : Date.now(),
-      qty : req.query.qty,
-      cId : req.query.cId
+      qty : req.body.qty,
+      cId : req.body.cId
     };
     var updates = {};
     updates[postKey] = data;
