@@ -52,6 +52,22 @@ exports.addContract = function(req, res) {
   });
 };
 
+exports.editContract = function(req, res) {
+    var postKey = db.ref('contracts/').push().key;
+    var data = {
+      asset : req.query.asset,
+      price : req.query.price,
+      time : req.query.time,
+      date : Date.now(),
+      qty : req.query.qty,
+      cId : req.query.cId
+    };
+    var updates = {};
+    updates[postKey] = data;
+    db.ref('contracts/').update(updates);
+    res.json({"uploaded data" : updates});
+};
+
 exports.getContract = function(req, res) {
   db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
     for (const key in snapshot.val()){

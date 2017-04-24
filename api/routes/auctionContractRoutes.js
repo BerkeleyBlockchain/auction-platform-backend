@@ -6,6 +6,8 @@ module.exports = function(app) {
   // todoList Routes
   app.route('/contracts')
     .get(auctionController.getContracts);
+  app.route('/editContract')
+    .post(auctionController.editContract);
   app.route('/closeContract')
     .get(auctionController.closeContract);
   app.route('/contracts/addContract')
