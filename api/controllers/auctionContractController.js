@@ -37,11 +37,11 @@ exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
     var postKey = db.ref('contracts/').push().key;
     var data = {
-      asset : req.query.asset,
-      price : req.query.price,
-      time : req.query.time,
+      asset : req.body.asset,
+      price : req.body.price,
+      time : req.body.time,
       date : Date.now(),
-      qty : req.query.qty,
+      qty : req.body.qty,
       cId : count.val()
     };
     var updates = {};
@@ -91,11 +91,11 @@ exports.bidById = function(req, res) {
 exports.addBid = function(req, res) {
   var postKey = db.ref('bids/').push().key;
   var data = {
-    supplier : req.query.supplier,
-    price : req.query.price,
+    supplier : req.body.supplier,
+    price : req.body.price,
     date : Date.now(),
-    time : req.query.time,
-    cId : Number.parseInt(req.query.cId)
+    time : req.body.time,
+    cId : Number.parseInt(req.body.cId)
   };
   var updates = {};
   updates[postKey] = data;
