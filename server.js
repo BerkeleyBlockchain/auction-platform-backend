@@ -1,4 +1,5 @@
 var firebase = require("firebase");
+var cors = require('cors');
 var express = require('express'),
   app = express(),
   port = process.env.PORT,
@@ -19,6 +20,7 @@ var defaultDatabase = defaultApp.database();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors({origin: true}));
 
 
 var routes = require('./api/routes/auctionContractRoutes');
