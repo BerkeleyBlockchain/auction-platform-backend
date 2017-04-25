@@ -3,17 +3,15 @@ module.exports = function(app) {
   var auctionController = require('../controllers/auctionContractController');
 
 
-  // todoList Routes
+
   app.route('/contracts')
-    .get(auctionController.getContracts);
-  app.route('/editContract')
-    .post(auctionController.editContract);
+    .get(auctionController.getContracts) //get all contracts
+    .post(auctionController.addContract); //add new contract
+  app.route('/contracts/:cId')
+    .get(auctionController.getContract) //get one contract
+    .put(auctionController.editContract); //edit a contract
   app.route('/closeContract')
     .get(auctionController.closeContract);
-  app.route('/contracts/addContract')
-    .post(auctionController.addContract);
-  app.route('/contractById/')
-    .get(auctionController.getContract);
   app.route('/count')
     .get(auctionController.count);
   app.route('/bids')
@@ -21,4 +19,7 @@ module.exports = function(app) {
     .post(auctionController.addBid);
   app.route('/bidById')
     .get(auctionController.bidById);
+  app.route('/fields')
+      .post(auctionController.addField)
+      .get(auctionController.getFieldByContractId);
 };
