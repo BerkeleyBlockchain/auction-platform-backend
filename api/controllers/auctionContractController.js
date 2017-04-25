@@ -59,6 +59,7 @@ exports.editContract  = function(req, res) {
   query.orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(fillData)
 
   function fillData(snapshot) {
+    var i = 0;
     for (const key in snapshot.val()){
       console.log(key);
     var data = {
@@ -69,12 +70,16 @@ exports.editContract  = function(req, res) {
             qty : req.body.qty,
             cId : Number.parseInt(req.body.cId)
     };
-    var postKey = query.orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).key;
+    if(i == 0 ){
+    var postKey = key;
+  }
     console.log(postKey);
     var updates = {};
     updates[postKey] = data;
+    i++;
     db.ref('contracts/').update(updates);
-    res.json({"uploaded data" : updates})
+    res.json({"uploaded data" : updates});
+
   }
   }
 }
