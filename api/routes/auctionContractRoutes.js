@@ -5,11 +5,11 @@ module.exports = function(app) {
 
 
   app.route('/contracts')
-    .get(auctionController.getContracts) //get all contracts
+    .get(auctionController.getContracts)
+    .put(auctionController.editContract)
     .post(auctionController.addContract); //add new contract
-  app.route('/contracts/:cId')
+  app.route('/contractbyId')
     .get(auctionController.getContract) //get one contract
-    .put(auctionController.editContract); //edit a contract
   app.route('/closeContract')
     .get(auctionController.closeContract);
   app.route('/count')

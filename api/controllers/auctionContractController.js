@@ -38,7 +38,6 @@ exports.closeContract = function(req, res) {
 exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
     var postKey = db.ref('contracts/').push().key;
-    var postKey1 = db.ref('contracts/' + count.val.toString).push().key;
     var data = {
       asset : req.body.asset,
       price : req.body.price,
@@ -49,33 +48,34 @@ exports.addContract = function(req, res) {
     };
     var updates = {};
     updates[postKey] = data;
-    var updates1 = {};
-    updates1[postKey1] = data;
     db.ref('contracts/').update(updates);
-    db.ref('contracts/' + count.val).update(updates1);
     db.ref().update({"count" : count.val()+1});
     res.json({"uploaded data" : updates});
   });
 };
 
 exports.editContract  = function(req, res) {
-  var query = db.ref('contracts/' + req.body.cId);
-  query.once('value').then(fillData)
+  var query =db.ref('contracts/');
+  query.orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(fillData)
 
-  function fillData(snap) {
+  function fillData(snapshot) {
+    for (const key in snapshot.val()){
+      console.log(key);
     var data = {
       asset : req.body.asset,
             price : req.body.price,
             time : req.body.time,
             date : Date.now(),
             qty : req.body.qty,
-            cId : req.body.cId
+            cId : Number.parseInt(req.body.cId)
     };
-    var postKey = req.body.cId;
+    var postKey = query.orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).key;
+    console.log(postKey);
     var updates = {};
     updates[postKey] = data;
-    db.ref('contracts/' + req.body.cId).update(updates);
+    db.ref('contracts/').update(updates);
     res.json({"uploaded data" : updates})
+  }
   }
 }
   //needs to be changed
@@ -96,10 +96,12 @@ exports.editContract  = function(req, res) {
 // };
 
 
-//changed
 exports.getContract = function(req, res) {
-  db.ref('contracts/' + req.header('cID')).once('value').then(function(snapshot){
-    res.json(snapshot.val());
+  db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
+    for (const key in snapshot.val()){
+      console.log(key);
+      res.json(snapshot.val()[key]);
+    }
   });
 };
 
@@ -139,7 +141,7 @@ exports.count = function(req, res) {
 exports.addField = function(req, res) {
   var postKey = db.ref('fields/').push().key;
   var data = {
-    cId : Number.parseInt(req.body.cId),
+    cId :  Number.parseInt(req.body.cId),
     extrafield : req.body.extrafield
   };
   var updates = {};
@@ -149,7 +151,9 @@ exports.addField = function(req, res) {
 };
 
 exports.getFieldByContractId = function(req, res) {
-  db.ref('fields/').orderByChild('cID').equalTo(Number.parseInt(req.header('cID'))).once('value').then(function(snapshot) {
+  db.ref('fields/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot) {
+    // for (const key in snapshot.val()){
+    //   res.json(snapshot.val()[key]);
     res.json(snapshot.val());
-  });
+  })
 };
