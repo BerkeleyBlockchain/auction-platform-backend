@@ -12,13 +12,14 @@ var config = {
 // Initialize the default app
 var app = firebase.initializeApp(config, "other");
 var db = app.database();
-
+//this can remain the same
 exports.getContracts = function(req, res) {
   db.ref('contracts/').orderByChild('cId').once('value').then(function(snapshot){
     res.json(snapshot.val());
   });
 };
 
+//not sure if i need to change this
 exports.closeContract = function(req, res) {
   db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
     var data = snapshot.val();
@@ -33,6 +34,7 @@ exports.closeContract = function(req, res) {
   });
 };
 
+//changed
 exports.addContract = function(req, res) {
   db.ref('count/').once('value').then(function(count){
     var postKey = db.ref('contracts/').push().key;
@@ -52,25 +54,57 @@ exports.addContract = function(req, res) {
   });
 };
 
-exports.editContract = function(req, res) {
-    var postKey = db.ref('contracts/').push().key;
+exports.editContract  = function(req, res) {
+  var query =db.ref('contracts/');
+  query.orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(fillData)
+
+  function fillData(snapshot) {
+    var i = 0;
+    for (const key in snapshot.val()){
+      console.log(key);
     var data = {
       asset : req.body.asset,
-      price : req.body.price,
-      time : req.body.time,
-      date : Date.now(),
-      qty : req.body.qty,
-      cId : req.body.cId
+            price : req.body.price,
+            time : req.body.time,
+            date : Date.now(),
+            qty : req.body.qty,
+            cId : Number.parseInt(req.body.cId)
     };
+    if(i == 0 ){
+    var postKey = key;
+  }
+    console.log(postKey);
     var updates = {};
     updates[postKey] = data;
+    i++;
     db.ref('contracts/').update(updates);
     res.json({"uploaded data" : updates});
-};
+
+  }
+  }
+}
+  //needs to be changed
+// exports.editContract = function(req, res) {
+//     var postKey = db.ref('contracts/' + req.body.cId).push().key;
+//     var data = {
+//       asset : req.body.asset,
+//       price : req.body.price,
+//       time : req.body.time,
+//       date : Date.now(),
+//       qty : req.body.qty,
+//       cId : req.body.cId
+//     };
+//     var updates = {};
+//     updates[postKey] = data;
+//     db.ref('contracts/').update(updates);
+//     res.json({"uploaded data" : updates});
+// };
+
 
 exports.getContract = function(req, res) {
   db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
     for (const key in snapshot.val()){
+      console.log(key);
       res.json(snapshot.val()[key]);
     }
   });
@@ -101,10 +135,30 @@ exports.addBid = function(req, res) {
   updates[postKey] = data;
   db.ref('bids/').update(updates);
   res.json({"uploaded data" : updates});
-}
+};
 
 exports.count = function(req, res) {
   db.ref('count/').once('value').then(function(snapshot){
     res.json(snapshot.val());
   });
+};
+
+exports.addField = function(req, res) {
+  var postKey = db.ref('fields/').push().key;
+  var data = {
+    cId :  Number.parseInt(req.body.cId),
+    extrafield : req.body.extrafield
+  };
+  var updates = {};
+  updates[postKey] = data;
+  db.ref('fields/').update(updates);
+  res.json({"uploaded data" : updates})
+};
+
+exports.getFieldByContractId = function(req, res) {
+  db.ref('fields/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot) {
+    // for (const key in snapshot.val()){
+    //   res.json(snapshot.val()[key]);
+    res.json(snapshot.val());
+  })
 };
