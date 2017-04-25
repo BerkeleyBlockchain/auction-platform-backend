@@ -2,7 +2,7 @@ var firebase = require("firebase");
 var cors = require('cors');
 var express = require('express'),
   app = express(),
-  port = process.ENV.port,
+  port = process.env.PORT,
   bodyParser = require('body-parser');
 
 var config = {
