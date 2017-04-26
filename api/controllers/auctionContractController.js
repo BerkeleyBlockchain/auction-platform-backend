@@ -42,7 +42,7 @@ exports.addContract = function(req, res) {
       asset : req.body.asset,
       price : req.body.price,
       time : req.body.time,
-      date : Date.now(),
+      date : req.body.date,
       qty : req.body.qty,
       cId : count.val()
     };
@@ -66,9 +66,9 @@ exports.editContract  = function(req, res) {
       asset : req.body.asset,
             price : req.body.price,
             time : req.body.time,
-            date : Date.now(),
+            date : req.body.date,
             qty : req.body.qty,
-            cId : Number.parseInt(req.body.cId)
+            cId : req.body.cId
     };
     if(i == 0 ){
     var postKey = key;
@@ -127,9 +127,9 @@ exports.addBid = function(req, res) {
   var data = {
     supplier : req.body.supplier,
     price : req.body.price,
-    date : Date.now(),
+    date : req.body.date,
     time : req.body.time,
-    cId : Number.parseInt(req.body.cId)
+    cId : req.body.cId
   };
   var updates = {};
   updates[postKey] = data;
@@ -146,7 +146,7 @@ exports.count = function(req, res) {
 exports.addField = function(req, res) {
   var postKey = db.ref('fields/').push().key;
   var data = {
-    cId :  Number.parseInt(req.body.cId),
+    cId :  req.body.cId,
     extrafield : req.body.extrafield
   };
   var updates = {};
