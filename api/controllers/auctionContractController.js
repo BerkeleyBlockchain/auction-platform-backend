@@ -149,6 +149,7 @@ exports.addField = function(req, res) {
     cId :  req.body.cId,
     extrafield : req.body.extrafield
   };
+  console.log(req.body.cId);
   var updates = {};
   updates[postKey] = data;
   db.ref('fields/').update(updates);
