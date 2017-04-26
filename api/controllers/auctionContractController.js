@@ -42,7 +42,7 @@ exports.addContract = function(req, res) {
       asset : req.body.asset,
       price : req.body.price,
       time : req.body.time,
-      date : Date.now(),
+      date : req.body.date,
       qty : req.body.qty,
       cId : count.val()
     };
@@ -66,7 +66,7 @@ exports.editContract  = function(req, res) {
       asset : req.body.asset,
             price : req.body.price,
             time : req.body.time,
-            date : Date.now(),
+            date : req.body.date,
             qty : req.body.qty,
             cId : Number.parseInt(req.body.cId)
     };
@@ -127,7 +127,7 @@ exports.addBid = function(req, res) {
   var data = {
     supplier : req.body.supplier,
     price : req.body.price,
-    date : Date.now(),
+    date : req.body.date,
     time : req.body.time,
     cId : Number.parseInt(req.body.cId)
   };
