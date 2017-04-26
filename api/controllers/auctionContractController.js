@@ -103,10 +103,10 @@ exports.editContract  = function(req, res) {
 
 exports.getContract = function(req, res) {
   db.ref('contracts/').orderByChild('cId').equalTo(Number.parseInt(req.header('cId'))).once('value').then(function(snapshot){
-    for (const key in snapshot.val()){
-      console.log(key);
-      res.json(snapshot.val()[key]);
-    }
+    // for (const key in snapshot.val()){
+    //   console.log(key);
+      res.json(snapshot.val());
+    // }
   });
 };
 
